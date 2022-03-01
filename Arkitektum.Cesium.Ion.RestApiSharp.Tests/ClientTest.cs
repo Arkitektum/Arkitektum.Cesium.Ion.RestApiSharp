@@ -38,7 +38,7 @@ public class ClientTest
         var client = new CesiumIonClient(AccessToken);
 
         const string fileName = @"C:\Users\LeifHalvorSunde\source\repos\DiBK.Plankart\DiBK.Plankart.Application\Resources\test.tiff";
-        var assetStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+        using var assetStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
 
         var newAssetId = client.UploadAssetAsync(asset, assetStream).Result;
 
@@ -58,8 +58,6 @@ public class ClientTest
         Assert.NotNull(deleteResponse);
 
         Assert.ThrowsAsync<AggregateException>(() => client.GetAssetAsync(newAssetId.Value));
-
-        assetStream.Dispose();
 
         Assert.Equal(AssetStatus.COMPLETE, completedAsset.Status);
         Assert.Equal(100, completedAsset.PercentComplete);
