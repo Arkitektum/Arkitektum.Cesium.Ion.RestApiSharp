@@ -37,20 +37,21 @@ public enum AssetStatus
     DATA_ERROR,
     ERROR,
     NOT_STARTED,
+    IN_PROGRESS,
 }
 
-internal enum AssetFromType
+public enum AssetFromType
 {
     S3,
 }
 
-internal enum HeightReference
+public enum HeightReference
 {
     MEAN_SEA_LEVEL,
     WGS84,
 }
 
-internal enum GeometryCompression
+public enum GeometryCompression
 {
     NONE,
     DRACO,

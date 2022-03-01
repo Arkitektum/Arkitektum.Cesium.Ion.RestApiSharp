@@ -2,7 +2,7 @@
 
 namespace Arkitektum.Cesium.Ion.RestApiSharp.Models;
 
-internal class AssetFrom
+public class AssetFrom
 {
     public AssetFromType Type { get; set; }
     public string Bucket { get; set; }
@@ -11,18 +11,18 @@ internal class AssetFrom
     public PrefixList? Prefixes { get; set; }
 }
 
-internal class Credentials
+public class Credentials
 {
     public string? AccessKey { get; set; }
     public string? SecretAccessKey { get; set; }
 }
 
-internal class KeyList
+public class KeyList
 {
     public List<string>? Keys { get; set; }
 }
 
-internal class PrefixList
+public class PrefixList
 {
     public List<string>? Prefixes { get; set; }
 }

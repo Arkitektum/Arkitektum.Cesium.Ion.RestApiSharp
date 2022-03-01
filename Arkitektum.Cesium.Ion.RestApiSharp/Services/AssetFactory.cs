@@ -5,7 +5,7 @@ namespace Arkitektum.Cesium.Ion.RestApiSharp.Services
 {
     public static class AssetFactory
     {
-        public static Asset Create(string assetName, string assetLocation, AssetType assetType, SourceType sourceType, string? attribution=null, string? description=null)
+        public static Asset Create(string assetName, AssetType assetType, SourceType sourceType, string assetLocation="", string? attribution=null, string? description=null)
         {
             return new Asset
             {

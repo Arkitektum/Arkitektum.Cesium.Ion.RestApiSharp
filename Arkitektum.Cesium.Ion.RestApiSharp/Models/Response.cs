@@ -1,4 +1,4 @@
-﻿using Arkitektum.Cesium.Ion.RestApiSharp.Util;
+using Arkitektum.Cesium.Ion.RestApiSharp.Util;
 
 namespace Arkitektum.Cesium.Ion.RestApiSharp.Models;
 
@@ -9,7 +9,7 @@ internal class Response
     public OnComplete OnComplete { get; set; }
 }
 
-internal class AssetMetadata
+public class AssetMetadata
 {
     public int Id { get; set; }
     public AssetType Type { get; set; }

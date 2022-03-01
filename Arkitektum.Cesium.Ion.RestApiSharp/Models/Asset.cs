@@ -7,7 +7,7 @@ public class Asset
     public string Name { get; set; }
     public string? Description { get; set; }
     public string? Attribution { get; set; }
-    public AssetType Type { get; set; } 
-    internal AssetOptions Options { get; set; }
-    internal AssetFrom? From { get; set; }
+    public AssetType Type { get; set; }
+    public AssetOptions Options { get; set; }
+    public AssetFrom? From { get; set; }
 }

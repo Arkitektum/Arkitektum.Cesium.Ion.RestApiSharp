@@ -2,17 +2,17 @@
 
 namespace Arkitektum.Cesium.Ion.RestApiSharp.Models;
 
-internal abstract class AssetOptions
+public abstract class AssetOptions
 {
     public SourceType SourceType { get; set; }
 }
 
-internal class RasterImageryOptions : AssetOptions
+public class RasterImageryOptions : AssetOptions
 {
     public RasterImageryOptions() {SourceType = SourceType.RASTER_IMAGERY;}
 }
 
-internal class RasterTerrainOptions : AssetOptions
+public class RasterTerrainOptions : AssetOptions
 {
     public HeightReference? HeightReference { get; set; }
     public int? ToMeters { get; set; }
@@ -26,12 +26,12 @@ internal class RasterTerrainOptions : AssetOptions
     }
 }
 
-internal class TerrainDatabaseOptions : AssetOptions
+public class TerrainDatabaseOptions : AssetOptions
 {
     public TerrainDatabaseOptions() {SourceType = SourceType.TERRAIN_DATABASE;}
 }
 
-internal class CityGmlOptions : AssetOptions
+public class CityGmlOptions : AssetOptions
 {
     public GeometryCompression? GeometryCompression { get; set; }
     public bool? DisableColors { get; set; }
@@ -52,7 +52,7 @@ internal class CityGmlOptions : AssetOptions
     }
 }
 
-internal class ThreeDTilesOptions : AssetOptions
+public class ThreeDTilesOptions : AssetOptions
 {
     public string TilesetJson { get; set; }
 
