@@ -61,19 +61,18 @@ public class CesiumIonClient : IDisposable
 
         using var uploadResult = await _client.PostAsync(response.OnComplete.Url, updateUploadContent);
 
-        Task.Run(bool() =>
+        Task.Run(() =>
         {
             string message;
             while (!UploadIsReady(response.AssetMetadata.Id, out message, out var error) && !error)
             {
                 Debug.WriteLine(message);
                 if (error)
-                    return false;
+                    return;
                 Task.Delay(5000).Wait();
             }
 
             Debug.WriteLine(message);
-            return true;
         }).Wait();
 
         return response.AssetMetadata.Id;
