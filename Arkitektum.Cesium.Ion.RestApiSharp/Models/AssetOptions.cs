@@ -23,6 +23,7 @@ public class RasterTerrainOptions : AssetOptions
     {
         SourceType = SourceType.RASTER_TERRAIN;
         BaseTerrainId = 1;
+        HeightReference = Util.HeightReference.WGS84;
     }
 }
 
