@@ -37,7 +37,7 @@ public class ClientTest
 
         var client = new CesiumIonClient(AccessToken);
 
-        const string fileName = @"C:\Users\LeifHalvorSunde\source\repos\DiBK.Plankart\DiBK.Plankart.Application\Resources\test.tiff";
+        const string fileName = @"C:\Users\LeifHalvorSunde\FTP\3d-plankart\nattlandsfjellet1000x1000.tiff";
         using var assetStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
 
         var newAssetId = client.UploadAssetAsync(asset, assetStream).Result;
@@ -61,5 +61,26 @@ public class ClientTest
 
         Assert.Equal(AssetStatus.COMPLETE, completedAsset.Status);
         Assert.Equal(100, completedAsset.PercentComplete);
+    }
+
+    [Fact]
+    public void ShouldDeleteAsset()
+    {
+        const int ASSET_NO = -1;
+        var responseMessage = new CesiumIonClient(AccessToken).DeleteAssetAsync(ASSET_NO).Result;
+
+        Assert.NotNull(responseMessage);
+    }
+
+    [Fact]
+    public void DeleteAllAssetsNotCompleteOrInProgress()
+    {
+        var assets = new CesiumIonClient(AccessToken).GetAssetListAsync().Result;
+
+        foreach (var asset in assets)
+        {
+            if (asset.Status != AssetStatus.COMPLETE && asset.Status != AssetStatus.IN_PROGRESS)
+                _ = new CesiumIonClient(AccessToken).DeleteAssetAsync(asset.Id).Result;
+        }
     }
 }
