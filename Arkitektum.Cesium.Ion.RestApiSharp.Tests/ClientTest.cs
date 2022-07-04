@@ -1,5 +1,7 @@
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using Arkitektum.Cesium.Ion.RestApiSharp.Services;
 using Arkitektum.Cesium.Ion.RestApiSharp.Util;
 using Xunit;
@@ -42,16 +44,29 @@ public class ClientTest
 
         var newAssetId = client.UploadAssetAsync(asset, assetStream).Result;
 
-        Assert.True(newAssetId.HasValue);
+        Assert.NotNull(newAssetId);
 
-        var completedAsset = client.GetAssetAsync(newAssetId.Value).Result;
+        Task.Delay(500);
 
-        Assert.NotNull(completedAsset);
-        Assert.Equal(newAssetId, completedAsset.Id);
-        Assert.Equal(assetName, completedAsset.Name);
-        Assert.Equal(assetDescription, completedAsset.Description);
-        Assert.Equal(string.Empty, completedAsset.Attribution);
-        Assert.Equal(AssetType.TERRAIN, completedAsset.Type);
+        var newAsset = client.GetAssetAsync(newAssetId.Value).Result;
+
+        while (!newAsset.IsComplete())
+        {
+            newAsset = client.GetAssetAsync(newAssetId.Value).Result;
+
+            Assert.False(newAsset.IsCorrupt());
+
+            Task.Delay(10000).Wait();
+
+            Debug.WriteLine($"Asset is {client.GetUploadPercentProgress(newAssetId.Value)}% complete");
+        }
+
+        Assert.NotNull(newAsset);
+        Assert.Equal(newAssetId, newAsset.Id);
+        Assert.Equal(assetName, newAsset.Name);
+        Assert.Equal(assetDescription, newAsset.Description);
+        Assert.Equal(string.Empty, newAsset.Attribution);
+        Assert.Equal(AssetType.TERRAIN, newAsset.Type);
 
         var deleteResponse = client.DeleteAssetAsync(newAssetId.Value).Result;
 
@@ -59,8 +74,8 @@ public class ClientTest
 
         Assert.ThrowsAsync<AggregateException>(() => client.GetAssetAsync(newAssetId.Value));
 
-        Assert.Equal(AssetStatus.COMPLETE, completedAsset.Status);
-        Assert.Equal(100, completedAsset.PercentComplete);
+        Assert.Equal(AssetStatus.COMPLETE, newAsset.Status);
+        Assert.Equal(100, newAsset.PercentComplete);
     }
 
     [Fact]

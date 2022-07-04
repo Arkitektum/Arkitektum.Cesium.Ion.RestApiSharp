@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using Arkitektum.Cesium.Ion.RestApiSharp.Models;
 using Arkitektum.Cesium.Ion.RestApiSharp.Services;
 using Arkitektum.Cesium.Ion.RestApiSharp.Util;
@@ -61,20 +60,6 @@ public class CesiumIonClient : IDisposable
 
         using var uploadResult = await _client.PostAsync(response.OnComplete.Url, updateUploadContent);
 
-        Task.Run(() =>
-        {
-            string message;
-            while (!UploadIsReady(response.AssetMetadata.Id, out message, out var error) && !error)
-            {
-                Debug.WriteLine(message);
-                if (error)
-                    return;
-                Task.Delay(5000).Wait();
-            }
-
-            Debug.WriteLine(message);
-        }).Wait();
-
         return response.AssetMetadata.Id;
     }
 
@@ -89,6 +74,30 @@ public class CesiumIonClient : IDisposable
         var response = JsonConvert.DeserializeObject<Response>(jsonResponse, new StringEnumConverter());
 
         return response;
+    }
+
+    public int GetUploadPercentProgress(int assetId)
+    {
+        var asset = GetAssetAsync(assetId).Result;
+
+        if (asset == null)
+            return 0;
+
+        return asset.PercentComplete;
+    }
+
+    public async Task<bool> AssetIsCorrupt(int assetId)
+    {
+        var asset = await GetAssetAsync(assetId);
+
+        return asset == null || asset.IsCorrupt();
+    }
+
+    public async Task<bool> AssetIsComplete(int assetId)
+    {
+        var asset = await GetAssetAsync(assetId);
+
+        return asset != null && asset.IsComplete();
     }
 
     private bool UploadIsReady(int assetId, out string message, out bool error)
